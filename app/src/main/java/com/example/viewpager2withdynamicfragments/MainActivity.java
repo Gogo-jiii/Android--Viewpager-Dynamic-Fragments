@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
@@ -13,10 +14,10 @@ import com.example.viewpager2withdynamicfragments.transformers.AntiClockSpinTran
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int NUM_PAGES = 5;
     private ViewPager2 viewPager;
     private LinearLayout pager_dots;
     private FragmentStateAdapter pagerAdapter;
+    private static final int NUM_PAGES = 5;
     private String[] fragmentData = {"A", "B", "C", "D", "E"};
 
     @Override
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         pager_dots = findViewById(R.id.pager_dots);
 
-        pagerAdapter = new ViewPagerAdapter(this);
+        pagerAdapter = new ViewPagerAdapter(this, fragmentData, NUM_PAGES);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setPageTransformer(new AntiClockSpinTransformation());
         ViewPagerUtil.getInstance().setupIndicator(this, viewPager, pager_dots, NUM_PAGES);
@@ -44,25 +45,6 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         } else {
             viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
-        }
-    }
-
-    private class ViewPagerAdapter extends FragmentStateAdapter {
-
-        public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
-            super(fragmentActivity);
-        }
-
-        @NonNull @Override public Fragment createFragment(int position) {
-            Bundle bundle = new Bundle();
-            bundle.putString("key", fragmentData[position]);
-            ViewpagerFragment fragment = new ViewpagerFragment();
-            fragment.setArguments(bundle);
-            return fragment;
-        }
-
-        @Override public int getItemCount() {
-            return NUM_PAGES;
         }
     }
 }
